@@ -36,3 +36,6 @@ Because this project uses vanilla frontend technologies, you do not need to inst
 
 ## Acknowledgments
   Powered by [PokeAPI](https://pokeapi.co).
+
+## Shiny Update!
+  Added shiny odds on every click! Will now show shiny counter after you hit a shiny showing how many shinies you got! Happy Shiny Hunting!
