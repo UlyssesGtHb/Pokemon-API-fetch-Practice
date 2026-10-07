@@ -13,6 +13,8 @@
         <h1 id="pokemon-Name"></h1>
         <p id="pokemon-Id"></p>
 
+        <p id="pokemon-Shiny" class="shiny-badge" hidden>✨ SHINY! ✨</p>
+
         <dl class="stats">
             <dt>Type</dt>
             <dd id="pokemon-Type"></dd>
@@ -28,13 +30,15 @@
         </dl>
 
         <div class="controls">
-            <button id="cry-btn" disabled>Play Cry</button>
+            <button id="cry-btn" disabled>🔊 Play Cry</button>
             <button id="pokemon-btn">Catch New Pokémon</button>
         </div>
 
-        <p id="error-box" class="error-box" role="alert"></p>
+        <p id="shiny-Count" class="shiny-count"></p>
 
+        <p id="error-box" class="error-box" role="alert"></p>
     </main>
-    <script src="app.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>

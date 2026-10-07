@@ -1,19 +1,26 @@
 const pokemonImg = document.getElementById("pokemon-Img");
 const pokemonName = document.getElementById("pokemon-Name");
 const pokemonId = document.getElementById("pokemon-Id");
+const pokemonShiny = document.getElementById("pokemon-Shiny");
 const pokemonType = document.getElementById("pokemon-Type");
 const pokemonAbilities = document.getElementById("pokemon-Abilities");
 const pokemonHeight = document.getElementById("pokemon-Height");
 const pokemonWeight = document.getElementById("pokemon-Weight");
 const pokemonBtn = document.getElementById("pokemon-btn");
 const cryBtn = document.getElementById("cry-btn");
+const shinyCountEl = document.getElementById("shiny-Count");
 const errorBox = document.getElementById("error-box");
+const card = document.querySelector(".card");
 
-
+// Reuse a single Audio instance so cries don't overlap
 const cryAudio = new Audio();
 cryAudio.volume = 0.5;
 
+// Shiny odds — change this to taste (e.g. 1/50 for "special", 1/4096 for real-game)
+const SHINY_CHANCE = 1 / 50;
+
 let currentCryUrl = "";
+let shinyCount = 0;
 
 // Helper: turn "solar-power" into "Solar Power"
 function formatName(str) {
@@ -48,13 +55,33 @@ async function fetchPokemon() {
         }
         const data = await detailResponse.json();
 
-        // Update DOM
-        pokemonImg.src = data.sprites.other["official-artwork"].front_default
-                      || data.sprites.front_default;
+        // Roll for shiny
+        const isShiny = Math.random() < SHINY_CHANCE;
+
+        // Pick the right sprite
+        const artwork = data.sprites.other["official-artwork"];
+        pokemonImg.src = isShiny
+            ? artwork.front_shiny || artwork.front_default
+            : artwork.front_default;
+
+        // Basic info
         pokemonName.innerText = data.name.toUpperCase();
         pokemonId.innerText = `#${String(data.id).padStart(3, "0")}`;
+
+        // Shiny badge + card glow
+        pokemonShiny.hidden = !isShiny;
+        card.classList.toggle("is-shiny", isShiny);
+
+        // Shiny counter
+        if (isShiny) {
+            shinyCount++;
+            shinyCountEl.innerText = `✨ Shinies caught: ${shinyCount}`;
+        }
+
+        // Type
         pokemonType.innerText = data.types.map(t => formatName(t.type.name)).join(", ");
 
+        // Abilities (hidden ones marked)
         pokemonAbilities.innerText = data.abilities
             .map(a => {
                 const name = formatName(a.ability.name);
@@ -62,10 +89,11 @@ async function fetchPokemon() {
             })
             .join(", ");
 
+        // Height / Weight
         pokemonHeight.innerText = `${data.height / 10} m`;
         pokemonWeight.innerText = `${data.weight / 10} kg`;
 
-        // Handle cry
+        // Cry
         currentCryUrl = data.cries?.latest || data.cries?.legacy || "";
         cryBtn.disabled = !currentCryUrl;
 
@@ -80,6 +108,8 @@ async function fetchPokemon() {
         pokemonAbilities.innerText = "";
         pokemonHeight.innerText = "";
         pokemonWeight.innerText = "";
+        pokemonShiny.hidden = true;
+        card.classList.remove("is-shiny");
 
         // Reset cry
         currentCryUrl = "";
@@ -97,7 +127,7 @@ function playCry() {
     if (!currentCryUrl) return;
 
     cryAudio.src = currentCryUrl;
-    cryAudio.currentTime = 0;
+    cryAudio.currentTime = 0; // restart from the beginning if clicked again
     cryAudio.play().catch(err => console.error("Could not play cry:", err));
 }
 

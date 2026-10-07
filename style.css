@@ -17,18 +17,53 @@ body {
     text-align: center;
     max-width: 400px;
     width: 90%;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+.card.is-shiny {
+    border: 2px solid gold;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.7), 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 #pokemon-Img {
     width: 200px;
     height: 200px;
     object-fit: contain;
-    image-rendering: pixelated; /* keeps sprites crisp */
+    image-rendering: pixelated;
+}
+
+#pokemon-Name {
+    margin: 0.5rem 0 0;
+    text-transform: uppercase;
 }
 
 #pokemon-Id {
     color: #888;
     margin: 0 0 1rem;
+}
+
+.shiny-badge {
+    display: inline-block;
+    margin: 0.5rem 0 1rem;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #7a5c00;
+    background: linear-gradient(90deg, #ffe57a, #ffd700, #ffe57a);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+    animation: shiny-pulse 1.2s ease-in-out infinite;
+}
+
+/* Critical: makes the [hidden] attribute actually hide the badge,
+   even though .shiny-badge sets display: inline-block. */
+.shiny-badge[hidden] {
+    display: none;
+}
+
+@keyframes shiny-pulse {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 12px rgba(255, 215, 0, 0.8); }
+    50%      { transform: scale(1.08); box-shadow: 0 0 20px rgba(255, 215, 0, 1); }
 }
 
 .stats {
@@ -59,7 +94,7 @@ button {
     padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 8px;
-    background: #e3350d; /* Pokémon red */
+    background: #e3350d;
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -76,11 +111,19 @@ button:hover:not(:disabled) {
 }
 
 #cry-btn {
-    background: #3b4cca; /* Pokémon blue */
+    background: #3b4cca;
+}
+
+.shiny-count {
+    color: #b8860b;
+    font-size: 0.9rem;
+    font-weight: bold;
+    min-height: 1.2rem;
+    margin-top: 1rem;
 }
 
 .error-box {
     color: #c00;
     min-height: 1.2rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
